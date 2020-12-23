@@ -86,17 +86,16 @@
             type="checkbox"
             v-model="acceptance"
             :class="{
-              invalid: $v.acceptance.$dirty && !$v.acceptance.required
+              invalid: $v.acceptance.$dirty && !$v.acceptance.checked
             }"
           />
           <span>С правилами согласен</span>
-          <!-- <small
+          <p
             class="helper-text invalid"
-            v-if="$v.acceptance.$dirty && !$v.acceptance.required"
+            v-if="$v.acceptance.$dirty && !$v.acceptance.checked"
           >
-      
-      
-          </small> -->
+            Без согласия с правилами системы регистрация невозможна.
+          </p>
         </label>
       </p>
     </div>
@@ -130,7 +129,7 @@ export default {
     name: { alpha, required },
     email: { email, required },
     password: { required, minLength: minLength(8) },
-    acceptance: { required }
+    acceptance: { checked: v => v }
   },
   methods: {
     submitHandler() {
@@ -138,7 +137,14 @@ export default {
         this.$v.$touch();
         return;
       }
-      this.$router.push("/login");
+      const formData = {
+        name: this.name,
+        email: this.email,
+        password: this.password
+      };
+      console.log(formData);
+
+      this.$router.push("/");
     }
   }
 };
