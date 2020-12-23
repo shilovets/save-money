@@ -18,13 +18,13 @@
           class="helper-text invalid"
           v-if="$v.email.$dirty && !$v.email.required"
         >
-          Поле Email не должно быть пустым
+          Введите Email.
         </small>
         <small
           class="helper-text invalid"
           v-if="$v.email.$dirty && !$v.email.email"
         >
-          Введите корретный Email
+          Введите корретный Email.
         </small>
       </div>
       <div class="input-field">
@@ -44,14 +44,14 @@
           class="helper-text invalid"
           v-if="$v.password.$dirty && !$v.password.required"
         >
-          Введите пароль
+          Введите пароль.
         </small>
         <small
           class="helper-text invalid"
-          v-if="$v.password.$dirty && $v.password.minLength"
+          v-if="$v.password.$dirty && !$v.password.minLength"
         >
           Пароль должен быть {{ $v.password.$params.minLength.min }} символов.
-          Сейчас он {{ password.length }}
+          Сейчас он {{ password.length }}.
         </small>
       </div>
     </div>
