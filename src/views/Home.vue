@@ -3,66 +3,57 @@
     <div class="page-title">
       <h3>Счет</h3>
 
-      <button class="btn waves-effect waves-light btn-small">
+      <button class="btn waves-effect waves-light btn-small" @click="refresh">
         <i class="material-icons">refresh</i>
       </button>
     </div>
 
-    <div class="row">
-      <div class="col s12 m6 l4">
-        <div class="card bill-color bill-card">
-          <div class="card-content white-text">
-            <span class="card-title">Счет в валюте</span>
+    <Spinner v-if="loading" />
 
-            <p class="currency-line ">
-              <span>12.0 Р</span>
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col s12 m6 l8">
-        <div class="card rate-color bill-card">
-          <div class="card-content">
-            <div class="card-header">
-              <span class="card-title">Курс валют</span>
-            </div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Валюта</th>
-                  <th>Курс</th>
-                  <th>Дата</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr>
-                  <td>руб</td>
-                  <td>12121</td>
-                  <td>12.12.12</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+    <div v-else class="row">
+      <HomeBill :rates="currency.rates" />
+      <HomeCurrency :rates="currency.rates" :date="currency.date" />
     </div>
   </div>
 </template>
 
 <script>
+import HomeBill from "@/components/HomeBill";
+import HomeCurrency from "@/components/HomeCurrency";
+
 export default {
-  name: "Home"
+  name: "Home",
+  data: () => ({
+    loading: true,
+    currency: null
+  }),
+  async mounted() {
+    this.currency = await this.$store.dispatch("fetchCurrency");
+    this.loading = false;
+  },
+  methods: {
+    async refresh() {
+      this.loading = true;
+      this.currency = await this.$store.dispatch("fetchCurrency");
+      this.loading = false;
+    }
+  },
+  components: {
+    HomeBill,
+    HomeCurrency
+  }
 };
 </script>
 
-<style scoped>
+<style>
+.card {
+  height: 380px;
+}
 .page-title h3 {
   font-size: 2.5rem;
 }
 .card-title {
-  font-weight: 500;
+  font-weight: 700;
 }
 .bill-color {
   background: rgba(0, 136, 154, 0.3);
@@ -72,5 +63,8 @@ export default {
 }
 .currency-line {
   border-bottom: 2px solid #0f3057;
+}
+.currency-bill {
+  font-size: 20px !important;
 }
 </style>
