@@ -2,11 +2,10 @@ import firebase from "firebase/app";
 
 export default {
   actions: {
-    async login({ dispatch, commit }, { email, password }) {
+    async login({ commit }, { email, password }) {
       try {
         await firebase.auth().signInWithEmailAndPassword(email, password);
       } catch (e) {
-        console.log(dispatch);
         commit("setError", e);
         throw e;
       }
@@ -14,6 +13,7 @@ export default {
     async logout({ commit }) {
       await firebase.auth().signOut();
       commit("clearInfo");
+      commit("clearCategories");
     },
     async signup({ dispatch, commit }, { email, password, name }) {
       try {
@@ -28,7 +28,6 @@ export default {
           });
       } catch (e) {
         commit("setError", e);
-        console.log(dispatch);
         throw e;
       }
     },

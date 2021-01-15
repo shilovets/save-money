@@ -4,68 +4,53 @@
       <h3>Категории</h3>
     </div>
     <section>
-      <div class="row">
-        <div class="col s12 m6">
-          <div>
-            <div class="page-subtitle">
-              <h4>Создать</h4>
-            </div>
+      <Spinner v-if="loading" />
 
-            <form>
-              <div class="input-field">
-                <input id="name" type="text" />
-                <label for="name">Название</label>
-                <span class="helper-text invalid">Введите название</span>
-              </div>
+      <div v-else class="row">
+        <CategoryCreate @created="addNewCategory" />
 
-              <div class="input-field">
-                <input id="limit" type="number" />
-                <label for="limit">Лимит</label>
-                <span class="helper-text invalid">Минимальная величина</span>
-              </div>
-
-              <button class="btn waves-effect waves-light" type="submit">
-                Создать
-              </button>
-            </form>
-          </div>
-        </div>
-        <div class="col s12 m6">
-          <div>
-            <div class="page-subtitle">
-              <h4>Редактировать</h4>
-            </div>
-
-            <form>
-              <div class="input-field">
-                <select>
-                  <option>Category</option>
-                </select>
-                <label>Выберите категорию</label>
-              </div>
-
-              <div class="input-field">
-                <input type="text" id="name" />
-                <label for="name">Название</label>
-                <span class="helper-text invalid">TITLE</span>
-              </div>
-
-              <div class="input-field">
-                <input id="limit" type="number" />
-                <label for="limit">Лимит</label>
-                <span class="helper-text invalid">LIMIT</span>
-              </div>
-
-              <button class="btn waves-effect waves-light" type="submit">
-                Обновить
-              </button>
-            </form>
-          </div>
-        </div>
+        <CategoryEdit
+          :key="categories.length + updateCount"
+          :categories="categories"
+          @updated="updateCategories"
+        />
       </div>
     </section>
   </div>
 </template>
+
+<script>
+import CategoryEdit from "@/components/CategoryEdit";
+import CategoryCreate from "@/components/CategoryCreate";
+
+export default {
+  name: "categories",
+  data: () => ({
+    loading: true,
+    categories: [],
+    updateCount: 0
+  }),
+  async mounted() {
+    this.categories = await this.$store.dispatch("fetchCategories");
+    this.loading = false;
+  },
+  methods: {
+    addNewCategory(category) {
+      this.categories.push(category);
+    },
+    updateCategories(category) {
+      const idx = this.categories.findIndex(c => c.id === category.id);
+      this.categories[idx].title = category.title;
+      this.categories[idx].limit = category.limit;
+      this.updateCount++;
+    }
+  },
+  components: {
+    CategoryEdit,
+    CategoryCreate
+  }
+};
+</script>
 
 <style scoped>
 .page-title h3 {

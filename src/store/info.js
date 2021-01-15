@@ -4,6 +4,9 @@ export default {
   state: {
     info: {}
   },
+  getters: {
+    info: s => s.info
+  },
   mutations: {
     setInfo(state, info) {
       state.info = info;
@@ -28,8 +31,5 @@ export default {
         throw e;
       }
     }
-  },
-  getters: {
-    info: s => s.info
   }
 };

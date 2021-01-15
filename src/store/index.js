@@ -2,12 +2,16 @@ import Vue from "vue";
 import Vuex from "vuex";
 import auth from "./auth";
 import info from "./info";
+import category from "./category";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     error: null
+  },
+  getters: {
+    error: s => s.error
   },
   mutations: {
     setError(state, error) {
@@ -16,9 +20,6 @@ export default new Vuex.Store({
     clearError(state) {
       state.error = null;
     }
-  },
-  getters: {
-    error: s => s.error
   },
   actions: {
     async fetchCurrency() {
@@ -31,6 +32,7 @@ export default new Vuex.Store({
   },
   modules: {
     auth,
-    info
+    info,
+    category
   }
 });
