@@ -53,7 +53,7 @@
             class="helper-text invalid"
             v-if="$v.limit.$dirty && !$v.limit.minValue"
           >
-            Минимальный лимит {{ $v.limit.$params.minValue.min }} BYN.
+            Минимальное значение {{ $v.limit.$params.minValue.min }} BYN.
           </span>
         </div>
 
